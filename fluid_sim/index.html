@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Fluid 2</title>
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+	<div class="container">
+  		<canvas id="fluid"></canvas>
+  		<canvas id="flball"></canvas>
+	</div>
+	<div class="container">
+		<canvas id="balls"></canvas>
+	</div>
+	<script type="text/javascript" src="js/lightgl.js"></script>
+	<script type="text/javascript" src="js/balls.js"></script>
+	<script type="text/javascript" src="js/fluid-sim.js"></script>
+	<script type="text/javascript">
+		var canvasSize = 800;
+		
+		new FluidSim("fluid", {
+		    threshold: false,
+		    advectV: true,
+		    applyPressure: true,
+		    showArrows: true,
+		    size: canvasSize,
+		    initVFn: ['0.0', '0.0'],
+		    dyeSpots: false,
+		});
+		
+		//ballSim('flball', 'balls', canvasSize);
+		/*
+		var textCanvas = document.getElementById("flball");
+		var ctx = textCanvas.getContext("2d");
+		textCanvas.width = canvasSize;
+		textCanvas.height = canvasSize;
+		ctx.fillText('HEYAAAAAAAAAAAAAAAAAAAAAAAAA', 100, 100);
+		*/
+	</script>
+</body>
+</html>
