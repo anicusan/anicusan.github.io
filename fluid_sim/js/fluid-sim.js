@@ -573,7 +573,7 @@ window.FluidSim = function(canvasId, options) {
   };
 
   gl.onmousemove = function(ev) {
-    if (ev.dragging) {
+    if (ev) {
       textures.velocity1.drawTo(function() {
         addSplat(
           textures.velocity0,
