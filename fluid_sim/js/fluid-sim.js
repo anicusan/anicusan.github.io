@@ -2,7 +2,12 @@
  * 2D fluid simulation code for
  * http://jamie-wong.com/2016/08/04/webgl-fluid-simulation/
  */
-window.FluidSim = function(canvasId, options) {
+window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options) {
+
+  /*
+   *  Global Data Start
+   */
+
   options = options || {};
 
   options.initVFn = options.initVFn || [
@@ -11,9 +16,9 @@ window.FluidSim = function(canvasId, options) {
   ];
 
   options.initCFn = options.initCFn || [
-    'step(1.0, mod(floor((x + 1.0) / 0.2) + floor((y + 1.0) / 0.2), 2.0))',
-    'step(1.0, mod(floor((x + 1.0) / 0.2) + floor((y + 1.0) / 0.2), 2.0))',
-    'step(1.0, mod(floor((x + 1.0) / 0.2) + floor((y + 1.0) / 0.2), 2.0))'
+    'step(1.0, mod(floor((x + 1.5) / 0.2) + floor((y + 1.0) / 0.2), 2.0))',
+    'step(1.0, mod(floor((x + 1.5) / 0.2) + floor((y + 1.0) / 0.2), 2.0))',
+    'step(1.0, mod(floor((x + 1.5) / 0.2) + floor((y + 1.0) / 0.2), 2.0))'
   ];
 
   if (options.threshold === undefined) {
@@ -36,6 +41,139 @@ window.FluidSim = function(canvasId, options) {
     options.dyeSpots = false;
   }
 
+  // Sphere Data:
+  var selectedSphere = 0;
+  var spheres = [
+    // Sphere 0, rubber
+    {
+      name: 'rubber',
+      // --Initial position-- 
+      position: {x: false, y: false},
+      velocity: {x: 0, y: 0},
+      acc: {x: 0, y: 0},
+      // --Change sphere data--
+      density: 1100, // kg/m^3
+      radius: 0.03, // m
+      restitution: -0.828,
+      Cd: 0.47,  // Dimensionless
+      colour: 'red',
+      // --Calculated automatically--
+      mass: false, //kg
+      A: false,
+      V: false,
+      buoyancy: false,
+    },
+    // sphere 1, wood
+    {
+      name: 'wood',
+      // --Initial position-- 
+      position: {x: false, y: false},
+      velocity: {x: 0, y: 0},
+      acc: {x: 0, y: 0},
+      // --Change sphere data--
+      density: 800, // kg/m^3
+      radius: 0.02, // m
+      restitution: -0.403,
+      Cd: 0.47,  // Dimensionless
+      colour: 'brown',
+      // --Calculated automatically--
+      mass: false, //kg
+      A: false,
+      V: false,
+      buoyancy: false,
+    },
+    // Sphere 2, beach ball
+    {
+      name: 'beach ball',
+      // --Initial position-- 
+      position: {x: false, y: false},
+      velocity: {x: 0, y: 0},
+      acc: {x: 0, y: 0},
+      // --Change sphere data--
+      density: 533, // kg/m^3
+      radius: 0.08, // m
+      restitution: -0.752,
+      Cd: 0.47,  // Dimensionless
+      colour: 'pink',
+      // --Calculated automatically--
+      mass: false, //kg
+      A: false,
+      V: false,
+      buoyancy: false,
+    },
+    // Sphere 3, lead
+    {
+      name: 'lead',
+      // --Initial position-- 
+      position: {x: false, y: false},
+      velocity: {x: 0, y: 0},
+      acc: {x: 0, y: 0},
+      // --Change sphere data--
+      density: 11340, // kg/m^3
+      radius: 0.03, // m
+      restitution: -0.08,
+      Cd: 0.47,  // Dimensionless
+      colour: 'grey',
+      // --Calculated automatically--
+      mass: false, //kg
+      A: false,
+      V: false,
+      buoyancy: false,
+    }, 
+    // Sphere 4, experiment
+    {
+      name: 'experiment',
+      // --Initial position-- 
+      position: {x: false, y: false},
+      velocity: {x: 0, y: 0},
+      acc: {x: 0, y: 0},
+      // --Change sphere data--
+      density: 2742, // kg/m^3
+      radius: 0.03, // m
+      restitution: -0.08,
+      Cd: 0.47,  // Dimensionless
+      colour: 'black',
+      // --Calculated automatically--
+      mass: false, //kg
+      A: false,
+      V: false,
+      buoyancy: false,
+    },
+  ];
+
+  // Environment Data:
+  var DENSITY = 1000.0; // kg/m^3
+  var ag = 9.81;  // m/s^2
+  // 'Physical' dimension of fluid window
+  var dim = 4; // m
+
+  var mouse = {x: 0, y: 0, isDown: false};
+
+  // Initial position of selected sphere
+  function init_pos() {
+    //if (spheres[selectedSphere].position.x === false)
+      spheres[selectedSphere].position.x = dim / 2;
+    //if (spheres[selectedSphere].position.y === false)
+      spheres[selectedSphere].position.y = spheres[selectedSphere].radius;
+    console.log('initialised ball positions');
+    console.log(dim);
+  }
+  init_pos();
+
+  // Calculate the area, volume, mass and buoyancy for each ball
+  function calc_param() {
+    for(i = 0; i < spheres.length; i++)
+    {
+      spheres[i].A = Math.PI * spheres[i].radius * spheres[i].radius; // m^2
+      spheres[i].V = 4 / 3 * Math.PI * spheres[i].radius * spheres[i].radius * spheres[i].radius;
+      spheres[i].mass = spheres[i].density * spheres[i].V; // kg/m^3
+      spheres[i].buoyancy = DENSITY * spheres[i].V * ag;
+    }
+  }
+  calc_param();
+
+  console.log(spheres);
+
   // For silly reasons, these have to be equal for now.
   // This is because I assumed grid spacing was equal along
   // each axis, so if you want to change these to not be equal, you'd have to
@@ -48,14 +186,210 @@ window.FluidSim = function(canvasId, options) {
   // We assume every time step will be a 120th of a second.
   // The animation loop runs at 60 fps (hopefully), so we're simulating 2x
   // slow-mo.
-  var DELTA_T = 1/120.0;
-
-  // We arbitrarily set our fluid's density to 1 (this is rho in equations)
-  var DENSITY = 1000.0;
+  var DELTA_T = 1/60.0;
 
   var canvas = document.getElementById(canvasId);
-  //canvas.style.margin = "0 auto";
-  //canvas.style.display = "block";
+  var sphereCanvas = document.getElementById(sphereCanvasID);
+  var sphereSelection = document.getElementById(sphereSelectionID);
+
+  // Initialize the sphere canvas environment
+  sphereCanvas.width = WIDTH;
+  sphereCanvas.height = HEIGHT;
+  var spherectx = sphereCanvas.getContext("2d");
+
+  // Initialize sphere selection canvas
+  sphereSelection.width = WIDTH;
+  sphereSelection.height = HEIGHT * 0.1;
+  var selectctx = sphereSelection.getContext("2d");
+
+  /*
+   *  Global Data End
+   */
+
+
+  /*
+   *  Sphere Environment Functionality Start
+   */   
+
+  function sphere_getMousePosition(e) {
+    mouse.x = e.pageX - $(sphereCanvas).offset().left;
+    mouse.y = e.pageY - $(sphereCanvas).offset().top;
+  }
+
+  function sphere_mouseDown(e) {
+    if (e.which == 1) {
+        sphere_getMousePosition(e);
+        mouse.isDown = true;
+        spheres[selectedSphere].position.x = mouse.x / WIDTH * dim;
+        spheres[selectedSphere].position.y = mouse.y / HEIGHT * dim;
+    }
+  }
+
+  function sphere_mouseUp(e) { 
+    if (e.which == 1) {
+        mouse.isDown = false;
+        console.log('x: '+(spheres[selectedSphere].position.y - mouse.y / HEIGHT * dim));
+        console.log('y: '+(spheres[selectedSphere].position.x - mouse.x / WIDTH * dim));
+        spheres[selectedSphere].velocity.y = (spheres[selectedSphere].position.y - mouse.y / HEIGHT * dim) / DELTA_T / 10;
+        spheres[selectedSphere].velocity.x = (spheres[selectedSphere].position.x - mouse.x / WIDTH * dim) / DELTA_T / 10;
+    }
+  }
+
+  sphereCanvas.onmousemove = sphere_getMousePosition;
+  sphereCanvas.onmousedown = sphere_mouseDown;
+  sphereCanvas.onmouseup = sphere_mouseUp;
+
+  // Initialize spheres menu
+  function init_sphereSelection() {
+    var sphlen = WIDTH / spheres.length;
+    var sphctr = sphereSelection.height / 2;
+
+    for (i = 0; i < spheres.length; i++)
+    {
+      selectctx.beginPath();
+      selectctx.fillStyle = spheres[i].colour;
+      selectctx.arc(i * sphlen + sphlen / 2, sphctr, spheres[i].radius / dim * WIDTH, 0, Math.PI*2, true);
+      selectctx.fill();
+
+      selectctx.font = "12px Arial";
+      selectctx.fillText(spheres[i].name, i * sphlen + sphlen / 2,sphctr*1.7);
+      selectctx.closePath();
+    }
+  }
+
+  init_sphereSelection();
+
+  // Select sphere on click
+  function select_mouseDown(e) {
+    // Select Ball
+    if (e.which == 1) {
+      console.log('selected');
+      mouse.x = e.pageX - $(sphereCanvas).offset().left;
+      selectedSphere = Math.floor(mouse.x / (WIDTH / spheres.length));
+      init_pos();
+      /*
+      balls[selectedBall].position.x = c1.width/2;
+      balls[selectedBall].position.y = c1.height/5;
+      balls[selectedBall].velocity.x = 0;
+      balls[selectedBall].velocity.y = 0;
+      balls[selectedBall].acc.x = 0;
+      balls[selectedBall].acc.y = 0;
+      */
+    }
+  }
+
+  sphereSelection.onmousedown = select_mouseDown;
+
+  var Fx = false; // Force acting in x direction
+  var Fy = false; // Force acting in y direction
+
+  // Sphere movement in a frame
+  function sphere_physics() {
+    var sph = spheres[selectedSphere];
+
+    if ( ! mouse.isDown) {
+      // Drag Force: Fd = -1/2 * Cd * A * rho * v * v
+      // Define 'down' as ypositive and 'right' as xpositive
+      // Drag is always opposite to the sense of movement
+      // so use sign of velocity
+      // and buoyancy will act 'upwards', therefore negative y
+      Fx = -0.5 * sph.Cd * sph.A * DENSITY * sph.velocity.x * sph.velocity.x * Math.sign(sph.velocity.x);
+      Fy = -0.5 * sph.Cd * sph.A * DENSITY * sph.velocity.y * sph.velocity.y * Math.sign(sph.velocity.y) - sph.buoyancy;
+
+      Fx = (isNaN(Fx) ? 0 : Fx);
+      Fy = (isNaN(Fy) ? 0 : Fy);
+
+      // Calculate acceleration (F = ma)
+      sph.acc.x = Fx / sph.mass;
+      sph.acc.y = ag + (Fy / sph.mass);
+
+      // Integrate to get velocity
+      sph.velocity.x += sph.acc.x * DELTA_T;
+      sph.velocity.y += sph.acc.y * DELTA_T;
+
+      // Integrate to get position
+      sph.position.x += sph.velocity.x * DELTA_T;
+      sph.position.y += sph.velocity.y * DELTA_T;
+    }
+
+    // Handle collisions
+    if (sph.position.y > dim - sph.radius) {
+        sph.velocity.y *= sph.restitution;
+        sph.position.y = dim - sph.radius;
+    }
+    if (sph.position.y < sph.radius) {
+        sph.velocity.y *= sph.restitution;
+        sph.position.y = sph.radius;
+    }
+    if (sph.position.x > dim - sph.radius) {
+        sph.velocity.x *= sph.restitution;
+        sph.position.x = dim - sph.radius;
+    }
+    if (sph.position.x < sph.radius) {
+        sph.velocity.x *= sph.restitution;
+        sph.position.x = sph.radius;
+    }
+
+  }
+
+  function drawSphere() {
+    var sph = spheres[selectedSphere];
+
+    spherectx.clearRect(0, 0, WIDTH, HEIGHT);
+    spherectx.save();
+    spherectx.translate(sph.position.x / dim * WIDTH, sph.position.y / dim * HEIGHT);
+    spherectx.beginPath();
+    spherectx.fillStyle = sph.colour;
+    spherectx.arc(0, 0, sph.radius / dim * WIDTH, 0, Math.PI * 2, true);
+    spherectx.fill();
+    spherectx.closePath();
+    spherectx.restore();
+
+  }
+
+  function drawSlingshot() {
+    var sph = spheres[selectedSphere];
+
+    spherectx.beginPath();
+    spherectx.moveTo(sph.position.x / dim * WIDTH, sph.position.y / dim * HEIGHT);
+    spherectx.lineTo(mouse.x, mouse.y);
+    spherectx.stroke();
+    spherectx.closePath();
+  }
+
+  function disp() {
+    $("#Velocity").empty();
+    $("#Acceleration").empty();
+    $("#Distance").empty();
+    $('#Velocity').append('x: '+(spheres[selectedSphere].velocity.x).toFixed(2)+'m/s y: '
+      +(spheres[selectedSphere].velocity.y).toFixed(2)+'m/s');
+    $('#Acceleration').append('x: '+(spheres[selectedSphere].acc.x).toFixed(2)+'m/s^2 y: '
+      +(spheres[selectedSphere].acc.y).toFixed(2)+'m/s^2');
+    let ypos = spheres[selectedSphere].position.y;
+    $('#Distance').append('x: '+(spheres[selectedSphere].position.x).toFixed(2)+'m y: '+(ypos).toFixed(2)+'m');
+  }
+
+  function sphereSplash() {
+    var sph = spheres[selectedSphere];
+
+    textures.velocity1.drawTo(function() {
+      addSplat(
+        textures.velocity0,
+        [(sph.velocity.x / dim) * DELTA_T, -(sph.velocity.y / dim) * DELTA_T, 0.0, 0.0],
+        [(sph.position.x / dim), 1.0 - (sph.position.y / dim)],
+        sph.radius / dim,
+      );
+    });
+    textures.swap('velocity0', 'velocity1');
+  };  
+
+  /*
+   *  Sphere Environment Functionality End
+   */
+
+  /*
+   *  Fluid Environment Functionality Start
+   */
 
   var gl = GL.create(canvas);
   gl.canvas.width = WIDTH;
@@ -120,9 +454,9 @@ window.FluidSim = function(canvasId, options) {
     // Triangle pointing towards positive x axis
     // with baseline on the y axis
     var triangleVertices = [
-      [0, 0.2],
-      [1, 0],
-      [0, -0.2]
+      [0, 0.4],
+      [2, 0],
+      [0, -0.4]
     ];
 
     var arrowsMesh = new gl.Mesh({triangles: false});
@@ -138,6 +472,7 @@ window.FluidSim = function(canvasId, options) {
         }
       }
     }
+    console.log(arrowsMesh);
     arrowsMesh.compile();
     
     return function(velocityTexture) {
@@ -461,7 +796,7 @@ window.FluidSim = function(canvasId, options) {
   reset();
 
   // Reset the simulation on double click
-  canvas.addEventListener('dblclick', reset);
+  sphereCanvas.addEventListener('dblclick', reset);
 
   // Returns true if the canvas is on the screen
   // If "middleIn" is true, then will only return true if the middle of the
@@ -483,7 +818,16 @@ window.FluidSim = function(canvasId, options) {
     }
   };
 
+  /*
+   *  Fluid Environment Functionality End
+   */
+
+  /*
+   *  Frames Start
+   */
+
   gl.ondraw = function() {
+    //console.log('draw');
     // If the canvas isn't visible, don't draw it
     if (!onScreen()) return;
 
@@ -499,11 +843,16 @@ window.FluidSim = function(canvasId, options) {
       drawVectorFieldArrows(textures.velocity0);
     }
     gl.begin(gl.POINTS); gl.vertex(1, 2, 3); gl.end();
-    //console.log(textures);
+    
+    drawSphere();
+    sphereSplash();
+    if (mouse.isDown)
+      drawSlingshot();
+    disp();
   };
 
   gl.onupdate = function() {
-    //console.log('heeey');
+    //console.log('update');
     // If the canvas isn't fully on-screen, don't run the simulation
     if (!onScreen(true)) return;
 
@@ -570,21 +919,27 @@ window.FluidSim = function(canvasId, options) {
       // Add green to the bottom right
       addDyeSource([-0.002, 0.004, -0.002], [0.8, 0.2]);
     }
+
+    sphere_physics();
   };
 
   gl.onmousemove = function(ev) {
-    if (ev) {
+    if (ev.dragging) {
       textures.velocity1.drawTo(function() {
         addSplat(
           textures.velocity0,
           [5.0 * ev.deltaX / WIDTH, -5.0 * ev.deltaY / HEIGHT, 0.0, 0.0],
           [ev.offsetX / WIDTH, 1.0 - ev.offsetY / HEIGHT],
-          0.000777,
+          0.000177,
         );
       });
       textures.swap('velocity0', 'velocity1');
     }
   };
+
+  /*
+   *  Frames End
+   */
 
   gl.animate();
 };

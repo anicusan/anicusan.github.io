@@ -1,18 +1,29 @@
 .container {
     position: relative;
-    display: block;
     width: 800px;
-    margin: auto;
-}
- 
-#flball {
-    position: absolute;
-    z-index: 10;
+    margin: 0 auto;
 }
 
+#data {
+    width: 750px;
+    margin: 0 auto;
+}
+
+#data span {
+    width: 50px;
+    margin: 0 auto;
+}
+ 
 canvas {
-	margin: 0 auto;
-	left: 0px;
+    left: 0px;
     top: 0px;
-	display: block;
+}
+
+#sphere_selection {
+    border: 1px solid #666;
+}
+
+#sphere {
+    position: absolute;
+    z-index: 10;
 }

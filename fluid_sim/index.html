@@ -2,19 +2,34 @@
 <html>
 <head>
 	<title>Test Fluid 2</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.4/math.min.js"></script>
+	<script
+	  src="https://code.jquery.com/jquery-3.3.1.min.js"
+	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	  crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body>
+<body id='body'>
+	<div>Title</div>
 	<div class="container">
-  		<canvas id="fluid"></canvas>
+  		<canvas id="fluid">Use a better device!</canvas>
+  		<canvas id="sphere">Use a better browser!</canvas>
+	</div>
+	<div id="data">
+		<span>Velocity: <span id="Velocity"></span></span> | 
+		<span>Acceleration: <span id="Acceleration"></span></span> | 
+		<span>Distance: <span id="Distance"></span></span>
+	</div>
+	<div class="container">
+		<canvas id="sphere_selection">Use a better browser!</canvas>
 	</div>
 	<script type="text/javascript" src="js/lightgl.js"></script>
-	<script type="text/javascript" src="js/balls.js"></script>
 	<script type="text/javascript" src="js/fluid-sim.js"></script>
 	<script type="text/javascript">
-		var canvasSize = 800;
-		
-		new FluidSim("fluid", {
+		var canvasSize = 750;
+		console.log($(window).height());
+		new FluidSim("fluid", "sphere", "sphere_selection", {
 		    threshold: false,
 		    advectV: true,
 		    applyPressure: true,
@@ -23,6 +38,7 @@
 		    initVFn: ['0.0', '0.0'],
 		    dyeSpots: false,
 		});
+		canvasSize = 900;
 		
 		//ballSim('flball', 'balls', canvasSize);
 		/*
