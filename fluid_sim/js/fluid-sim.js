@@ -777,7 +777,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       endTime = new Date();
       endPos = sph.position.y;
       toDisp = (endTime - startTime) / 1000;
-      $('#data_log').append(''+(lenMeasure*100)+'cm travelled in '+toDisp.toFixed(4)+'s.<br>');
+      $('#data_log').append(''+(lenMeasure*100)+'cm travelled in '+(toDisp*60*DELTA_T).toFixed(4)+'s.<br>');
     }
 
     if (sph.position.y > dim - sph.radius * 1.2 && endPos == 0) {
