@@ -7,27 +7,82 @@
 	  src="https://code.jquery.com/jquery-3.3.1.min.js"
 	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	  crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body id='body'>
-	<div>Title</div>
-	<div class="container">
-  		<canvas id="fluid">Use a better device!</canvas>
-  		<canvas id="sphere">Use a better browser!</canvas>
-	</div>
-	<div id="data">
-		<span>Velocity: <span id="Velocity"></span></span> | 
-		<span>Acceleration: <span id="Acceleration"></span></span> | 
-		<span>Distance: <span id="Distance"></span></span>
+	<div class="top_container">
+
+		<button class="top_buttons" id="reset">Reset</button>
+		<button class="top_buttons">Help</button>
+
+		<button class="top_text">Time: </button>
+		<button class="button_time" id="4x_slower">4x Slower</button>
+		<button class="button_time" id="2x_slower">2x Slower</button>
+		<button class="button_time" id="real_time">Real Time</button>
+		<button class="button_time" id="2x_faster">2x Faster</button>
+		<button class="button_time" id="4x_faster">4x Faster</button>
+
+		<div class="top_space"></div>
+
+		<button class="top_text">Viscosity: </button>
+		<button class="button_viscosity" id="cst50">50 cSt</button>
+		<button class="button_viscosity" id="cst500">500 cSt</button>
+		<button class="button_viscosity" id="cst5000">5,000 cSt</button>
+		<button class="button_viscosity" id="cst30000">30,000 cSt</button>
+
+		<div class="top_space"></div>
+
 	</div>
 	<div class="container">
 		<canvas id="sphere_selection">Use a better browser!</canvas>
 	</div>
+
+	<div class="top_wrapper">
+		<div>Title</div>
+		<div class="container">
+	  		<canvas id="fluid">Use a better device!</canvas>
+	  		<canvas id="sphere">Use a better browser!</canvas>
+		</div>
+	</div>
+
+	<table class="data_table">
+		<tr>
+			<td colspan="2">Acceleration (m / s<sup>2</sup>)</td>
+			<td colspan="2">Velocity (m / s)</td>
+			<td colspan="2">Position (m)</td>
+			<td rowspan="4" class="col_log">
+				<div id="data_log"></div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" id="acc"></td>
+			<td colspan="2" id="vel"></td>
+			<td colspan="2"> - </td>
+		</tr>
+		<tr>
+			<td>x</td>
+			<td>y</td>
+			<td>x</td>
+			<td>y</td>
+			<td>x</td>
+			<td>y</td>
+		</tr>
+		<tr>
+			<td id="acc_x">accx</td>
+			<td id="acc_y">accy</td>
+			<td id="vel_x">velx</td>
+			<td id="vel_y">vely</td>
+			<td id="pos_x">posx</td>
+			<td id="pos_y">posy</td>
+		</tr>
+	</table>
+
 	<script type="text/javascript" src="js/lightgl.js"></script>
 	<script type="text/javascript" src="js/fluid-sim.js"></script>
 	<script type="text/javascript">
-		var canvasSize = 750;
+		var canvasSize = 800;
 		console.log($(window).height());
 		new FluidSim("fluid", "sphere", "sphere_selection", {
 		    threshold: false,
@@ -35,6 +90,7 @@
 		    applyPressure: true,
 		    showArrows: true,
 		    size: canvasSize,
+		    dim: 1,
 		    initVFn: ['0.0', '0.0'],
 		    dyeSpots: false,
 		});

@@ -1,3 +1,54 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.top_container {
+    width: 100%;
+    background-color: black;
+    height: 40px;
+    padding: 10px;
+}
+
+.button_time, .button_viscosity, .top_buttons {
+    float:left;
+    height: 40px;
+    width: 100px;
+    outline: none;
+    cursor: pointer;
+}
+
+.button_time:hover {
+    background-color: #bababa;
+}
+
+.button_viscosity:hover {
+    background-color: #bababa;
+}
+
+.active {
+    background-color: #777777;
+}
+
+.top_space {
+    float:left;
+    height: 40px;
+    width: 10px;
+}
+
+.top_text {
+    float:left;
+    height: 40px;
+    width: 100px;
+    color: white;
+    background-color: transparent;
+    border: 0;
+}
+
+.top_wrapper {
+    width: 100%;
+    background-color: black;
+}
+
 .container {
     position: relative;
     width: 800px;
@@ -20,10 +71,33 @@ canvas {
 }
 
 #sphere_selection {
-    border: 1px solid #666;
+    /*border: 1px solid #666;*/
+    cursor: pointer;
 }
 
 #sphere {
     position: absolute;
     z-index: 10;
+}
+
+.data_table {
+    margin: 0 auto;
+}
+
+.data_table td {
+    width: 100px;
+    border: solid 1px;
+    text-align: center;
+}
+
+.col_log {
+    width: 250px;
+    height: 150px;
+}
+
+#data_log {
+    height: 100%;
+    width: 250px;
+    text-align: left;
+    overflow-y: scroll;
 }
