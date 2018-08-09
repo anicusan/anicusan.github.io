@@ -1,12 +1,28 @@
 body {
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
 }
 
 .top_container {
-    width: 100%;
+    width: 100vw;
     background-color: black;
-    height: 40px;
-    padding: 10px;
+    height: 60px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.top_menu {
+    height: 100%;
+    width: 100%;
+}
+
+@media only screen and (max-width: 1320px) {
+    .top_container {
+        height: 110px;
+    }
+    .top_menu {
+        width: 800px;
+    }
 }
 
 .button_time, .button_viscosity, .top_buttons {
@@ -15,6 +31,7 @@ body {
     width: 100px;
     outline: none;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 .button_time:hover {
@@ -42,6 +59,7 @@ body {
     color: white;
     background-color: transparent;
     border: 0;
+    margin-top: 10px;
 }
 
 .top_wrapper {

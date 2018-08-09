@@ -42,7 +42,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   }
 
   // Sphere Data:
-  var selectedSphere = 0;
+  var selectedSphere = 4;
   var spheres = [
     // Sphere 0, stainless steel
     {
@@ -722,11 +722,10 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
 
   var terminalVelocityReached = 0;
   var initial_position_y = 0;
-  var startTime = 0;
-  var endTime = 0;
   var startPos = 0;
   var endPos = 0;
   var lenMeasure = 0.15; // m
+  var startIters = -1;
 
   function disp() {
     var sph = spheres[selectedSphere];
@@ -761,12 +760,14 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       $('#pos_y').append((dim - sph.radius).toFixed(4));
     }
 
+    if (startIters > -1)
+      startIters++;
     if (Math.sqrt(sph.acc.x * sph.acc.x + sph.acc.y * sph.acc.y) < 0.0001) {
       if (terminalVelocityReached == 0) {
         toDisp = sph.position.y - initial_position_y;
         $('#data_log').append('Terminal velocity reached after '+(toDisp*100).toFixed(4)+'cm.<br>');
 
-        startTime = new Date();
+        startIters = 0;
         startPos = sph.position.y;
 
         terminalVelocityReached = 1;
@@ -774,10 +775,10 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     }
 
     if (terminalVelocityReached == 1 && (sph.position.y - startPos).toFixed(4) >= lenMeasure && endPos == 0) {
-      endTime = new Date();
       endPos = sph.position.y;
-      toDisp = (endTime - startTime) / 1000;
-      $('#data_log').append(''+(lenMeasure*100)+'cm travelled in '+(toDisp*60*DELTA_T).toFixed(4)+'s.<br>');
+      toDisp = startIters*DELTA_T;
+      startIters = -1;
+      $('#data_log').append(''+(lenMeasure*100)+'cm travelled in '+toDisp.toFixed(2)+'s.<br>');
     }
 
     if (sph.position.y > dim - sph.radius * 1.2 && endPos == 0) {
@@ -792,8 +793,6 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   setInterval(function() {
       // allow 1px inaccuracy by adding 1
       var isScrolledToBottom = (logElement.scrollHeight - logElement.clientHeight <= logElement.scrollTop + 80);
-
-      console.log(isScrolledToBottom);
 
       // scroll to bottom if isScrolledToBottom is true
       if (isScrolledToBottom) {
