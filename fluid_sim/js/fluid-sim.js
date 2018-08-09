@@ -736,7 +736,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     $("#vel").empty(); $("#vel_x").empty(); $("#vel_y").empty();
     $("#pos").empty(); $("#pos_x").empty(); $("#pos_y").empty();
 
-    if (sph.position.y < dim - sph.radius * 1.2) {
+    if (sph.position.y < dim - sph.radius * 1.7) {
       toDisp = Math.sqrt(sph.acc.x * sph.acc.x + sph.acc.y * sph.acc.y);
       $('#acc').append(toDisp.toFixed(4));
       toDisp = Math.sqrt(sph.velocity.x * sph.velocity.x + sph.velocity.y * sph.velocity.y);
@@ -750,11 +750,11 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       $('#pos_y').append(sph.position.y.toFixed(4));
     }
     else {
-      $('#acc').append(ag);
+      $('#acc').append(0);
       $('#vel').append(0);
 
       $('#acc_x').append(sph.acc.x.toFixed(4));
-      $('#acc_y').append(ag);
+      $('#acc_y').append(0);
       $('#vel_x').append(sph.velocity.x.toFixed(4));
       $('#vel_y').append(0);
       $('#pos_x').append(sph.position.x.toFixed(4));
@@ -823,14 +823,16 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
    *  Fluid Environment Functionality Start
    */
 
-  var gl = GL.create(canvas);
+  var gl = GL.create();
+  gl.canvas.id = canvasId;
   gl.canvas.width = WIDTH;
   gl.canvas.height = HEIGHT;
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  $(canvas).replaceWith(gl.canvas).attr("id", canvasId);
 
   // Standard 2-triangle mesh covering the viewport
   // when draw with gl.TRIANGLE_STRIP
-  var standardMesh = gl.Mesh.load({
+  var standardMesh = GL.Mesh.load({
     vertices: [
       [-1, 1],
       [1, 1],
@@ -855,7 +857,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Given a texture holding a 2D velocity field, draw arrows
   // showing the direction of the fluid flow.
   var drawVectorFieldArrows = (function() {
-    var shader = new gl.Shader('\
+    var shader = new GL.Shader('\
       mat2 rot(float angle) { \
         float c = cos(angle); \
         float s = sin(angle); \
@@ -891,7 +893,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       [0, -0.4]
     ];
 
-    var arrowsMesh = new gl.Mesh({triangles: false});
+    var arrowsMesh = new GL.Mesh({triangles: false});
     arrowsMesh.addVertexBuffer('positions', 'position');
     
     var INTERVAL = 30;
@@ -927,7 +929,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     b = b || '0.0';
     a = a || '0.0';
 
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       varying vec2 textureCoord; \
       void main() { \
         float x = 2.0 * textureCoord.x - 1.0; \
@@ -947,7 +949,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Will stretch to fit, but in practice the texture and the framebuffer should be
   // the same size.
   var drawTexture = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       varying vec2 textureCoord; \
       uniform sampler2D inputTexture; \
       void main() { \
@@ -966,7 +968,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
 
   // Draw a texture to the framebuffer, thresholding at 0.5
   var drawTextureThreshold = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       varying vec2 textureCoord; \
       uniform sampler2D inputTexture; \
       void main() { \
@@ -986,7 +988,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Given an velocity texture and a time delta, advect the
   // quantities in the input texture into the output texture
   var advect = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform float deltaT; \
       uniform sampler2D inputTexture; \
       uniform sampler2D velocity; \
@@ -1016,7 +1018,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Apply a "splat" of change to a given place with a given
   // blob radius. The effect of the splat has an exponential falloff.
   var addSplat = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform vec4 change; \
       uniform vec2 center; \
       uniform float radius; \
@@ -1046,7 +1048,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
 
   // Make sure all the color components are between 0 and 1
   var clampColors = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform sampler2D inputTex; \
       varying vec2 textureCoord; \
       \
@@ -1067,7 +1069,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Calculate the divergence of the advected velocity field, and multiply by
   // (2 * epsilon * rho / deltaT).
   var calcDivergence = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform float deltaT;         // Time between steps \n\
       uniform float rho;            // Density \n\
       uniform float epsilon;        // Distance between grid units \n\
@@ -1105,7 +1107,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Perform a single iteration of the Jacobi method in order to solve for
   // pressure.
   var jacobiIterationForPressure = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform float epsilon;        // Distance between grid units \n\
       uniform sampler2D divergence; // Divergence field of advected velocity, d \n\
       uniform sampler2D pressure;   // Pressure field from previous iteration, p^(k-1) \n\
@@ -1146,7 +1148,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // Subtract the pressure gradient times a constant from the advected velocity
   // field.
   var subtractPressureGradient = (function() {
-    var shader = new gl.Shader(standardVertexShaderSrc, '\
+    var shader = new GL.Shader(standardVertexShaderSrc, '\
       uniform float deltaT;         // Time between steps \n\
       uniform float rho;            // Density \n\
       uniform float epsilon;        // Distance between grid units \n\
@@ -1191,7 +1193,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   var makeTextures = function(names) {
     var ret = {};
     names.forEach(function(name) {
-      ret[name] = new gl.Texture(WIDTH, HEIGHT, {type: gl.FLOAT});
+      ret[name] = new GL.Texture(WIDTH, HEIGHT, {type: gl.FLOAT});
     });
 
     ret.swap = function(a, b) {
@@ -1265,7 +1267,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   gl.ondraw = function() {
     //console.log('draw');
     // If the canvas isn't visible, don't draw it
-    if (!onScreen()) return;
+    // if (!onScreen()) return;
 
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
