@@ -33,6 +33,8 @@ body {
     outline: none;
     cursor: pointer;
     margin-top: 10px;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
 }
 
 .button_time:hover {
