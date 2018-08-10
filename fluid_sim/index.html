@@ -19,11 +19,12 @@
 			<button class="top_buttons">Help</button>
 
 			<button class="top_text">Time: </button>
-			<button class="button_time" id="4x_slower">4x Slower</button>
-			<button class="button_time" id="2x_slower">2x Slower</button>
-			<button class="button_time" id="real_time">Real Time</button>
-			<button class="button_time" id="2x_faster">2x Faster</button>
-			<button class="button_time" id="4x_faster">4x Faster</button>
+			<button class="button_time half" id="4x_slower">4x ◀◀</button>
+			<button class="button_time half" id="2x_slower">2x ◀◀</button>
+			<button class="button_time half" style="font-size: 22px;" id="stop_sim">‖</button>
+			<button class="button_time half" id="real_time">▶</button>
+			<button class="button_time half" id="2x_faster">2x ▶▶</button>
+			<button class="button_time half" id="4x_faster">4x ▶▶</button>
 
 			<div class="top_space"></div>
 
@@ -35,13 +36,20 @@
 
 			<div class="top_space"></div>
 
+			<button class="top_text">Jacobi iterations: </button>
+			<button class="button_jacobi half" id="jacobi_minus">▼</button>
+			<button class="button_jacobi half" id="jacobi_disp"></button>
+			<button class="button_jacobi half" id="jacobi_plus">▲</button>
+
+			<div class="top_space"></div>
+
 		</div>
 	</div>
 	<div class="container">
 		<canvas id="sphere_selection">Use a better browser!</canvas>
 	</div>
 
-	<div class="top_wrapper">
+	<div class="black_wrapper">
 		<div class="container" id="fluid_screen">
 	  		<canvas id="fluid">Use a better device!</canvas>
 	  		<canvas id="sphere">Use a better browser!</canvas>
@@ -53,7 +61,7 @@
 			<td colspan="2">Acceleration (m / s<sup>2</sup>)</td>
 			<td colspan="2">Velocity (m / s)</td>
 			<td colspan="2">Position (m)</td>
-			<td rowspan="4" class="col_log">
+			<td rowspan="5" class="col_log">
 				<div id="data_log"></div>
 			</td>
 		</tr>
@@ -78,6 +86,9 @@
 			<td id="pos_x">posx</td>
 			<td id="pos_y">posy</td>
 		</tr>
+		<tr>
+			<td colspan="6">Export to CSV</td>
+		</tr>
 	</table>
 
 	<script type="text/javascript" src="js/lightgl.js"></script>
@@ -91,7 +102,7 @@
 		    applyPressure: true,
 		    showArrows: true,
 		    size: canvasSize,
-		    dim: 1,
+		    dim: 2,
 		    initVFn: ['0.0', '0.0'],
 		    dyeSpots: false,
 		});

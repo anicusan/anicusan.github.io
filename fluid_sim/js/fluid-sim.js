@@ -490,41 +490,64 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   // The animation loop runs at 60 fps (hopefully), so we're making the
   // simulation faster or slower by:
   var DELTA_T = 1/60;
-  $("#real_time").toggleClass("active");
+  $("#real_time").addClass("active");
+
+  var stopsim = false;
+
   $("#4x_slower").click(function(e) {
     e.preventDefault();
     $('.button_time').not(this).removeClass('active');
-    $(this).toggleClass("active");
+    $(this).addClass("active");
 
     DELTA_T = 1/240;
+    stopsim = false;
   });
   $("#2x_slower").click(function(e) {
     e.preventDefault();
     $('.button_time').not(this).removeClass('active');
-    $(this).toggleClass("active");
+    $(this).addClass("active");
 
     DELTA_T = 1/120;
+    stopsim = false;
+  });
+  $("#stop_sim").click(function(e) {
+    e.preventDefault();
+    $('.button_time').not(this).removeClass('active');
+    $(this).addClass("active");
+
+    stopsim = true;
   });
   $("#real_time").click(function(e) {
     e.preventDefault();
     $('.button_time').not(this).removeClass('active');
-    $(this).toggleClass("active");
+    $(this).addClass("active");
 
     DELTA_T = 1/60;
+    stopsim = false;
+  });
+  $("#real_time").click(function(e) {
+    e.preventDefault();
+    $('.button_time').not(this).removeClass('active');
+    $(this).addClass("active");
+
+    DELTA_T = 1/60;
+    stopsim = false;
   });
   $("#2x_faster").click(function(e) {
     e.preventDefault();
     $('.button_time').not(this).removeClass('active');
-    $(this).toggleClass("active");
+    $(this).addClass("active");
 
     DELTA_T = 1/30;
+    stopsim = false;
   });
   $("#4x_faster").click(function(e) {
     e.preventDefault();
     $('.button_time').not(this).removeClass('active');
-    $(this).toggleClass("active");
+    $(this).addClass("active");
 
     DELTA_T = 1/15;
+    stopsim = false;
   });
 
   var canvas = document.getElementById(canvasId);
@@ -645,6 +668,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
           sph.Cd = 0.44;
         else
           sph.Cd = 0.11;
+
         //console.log("Cd: "+sph.Cd);
         // Drag Force: Fd = -1/2 * Cd * A * rho * v * v
         // Define 'down' as ypositive and 'right' as xpositive
@@ -806,7 +830,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     textures.velocity1.drawTo(function() {
       addSplat(
         textures.velocity0,
-        [(sph.velocity.x / dim) * DELTA_T, -(sph.velocity.y / dim) * DELTA_T, 0.0, 0.0],
+        [(sph.velocity.x / dim) * sph.mass * 60 * DELTA_T, -(sph.velocity.y / dim) * sph.mass * 60 * DELTA_T, 0.0, 0.0],
         [(sph.position.x / dim), 1.0 - (sph.position.y / dim)],
         sph.radius / dim,
       );
@@ -1255,6 +1279,28 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     }
   };
 
+  // Calculate the pressure, leaving the result in textures.pressure0
+  var JACOBI_ITERATIONS = 10;
+  $('#jacobi_disp').text(JACOBI_ITERATIONS);
+
+  $("#jacobi_minus").click(function(e) {
+    e.preventDefault();
+
+    if (JACOBI_ITERATIONS > 0)
+      JACOBI_ITERATIONS -= 2;
+
+    $('#jacobi_disp').text(JACOBI_ITERATIONS);
+  });
+
+  $("#jacobi_plus").click(function(e) {
+    e.preventDefault();
+
+    if (JACOBI_ITERATIONS < 31)
+      JACOBI_ITERATIONS += 2;
+    $('#jacobi_disp').text(JACOBI_ITERATIONS);
+  });
+
+
   /*
    *  Fluid Environment Functionality End
    */
@@ -1267,6 +1313,8 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     //console.log('draw');
     // If the canvas isn't visible, don't draw it
     // if (!onScreen()) return;
+
+    if (stopsim) return;
 
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1293,6 +1341,8 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     // If the canvas isn't fully on-screen, don't run the simulation
     // if (!onScreen(true)) return;
 
+    if (stopsim) return;
+
     if (options.advectV) {
       // Advect the velocity texture through itself, leaving the result in
       // textures.velocity0
@@ -1307,9 +1357,6 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       textures.divergence.drawTo(function() {
         calcDivergence(textures.velocity0);
       });
-
-      // Calculate the pressure, leaving the result in textures.pressure0
-      var JACOBI_ITERATIONS = 10;
 
       for (var i = 0; i < JACOBI_ITERATIONS; i++) {
         textures.pressure1.drawTo(function() {

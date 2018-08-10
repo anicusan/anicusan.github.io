@@ -1,6 +1,5 @@
 body {
     font-family: 'Montserrat', sans-serif;
-    overflow-x: hidden;
 }
 
 .top_container {
@@ -16,7 +15,7 @@ body {
     width: 100%;
 }
 
-@media only screen and (max-width: 1320px) {
+@media only screen and (max-width: 1350px) {
     .top_container {
         height: 110px;
     }
@@ -25,7 +24,7 @@ body {
     }
 }
 
-.button_time, .button_viscosity, .top_buttons {
+.button_time, .button_viscosity, .top_buttons, .button_jacobi {
     float:left;
     height: 40px;
     width: 100px;
@@ -33,6 +32,10 @@ body {
     cursor: pointer;
     margin-top: 10px;
     -webkit-border-radius: 0px;
+}
+
+.half {
+    width: 50px;
 }
 
 .button_time:hover {
@@ -63,7 +66,7 @@ body {
     margin-top: 10px;
 }
 
-.top_wrapper {
+.black_wrapper {
     width: 100%;
     background-color: black;
 }
