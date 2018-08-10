@@ -1,7 +1,6 @@
 body {
     font-family: 'Montserrat', sans-serif;
     overflow-x: hidden;
-    -webkit-appearance: none;
 }
 
 .top_container {
@@ -33,7 +32,6 @@ body {
     outline: none;
     cursor: pointer;
     margin-top: 10px;
-    -webkit-appearance: none;
     -webkit-border-radius: 0px;
 }
 
