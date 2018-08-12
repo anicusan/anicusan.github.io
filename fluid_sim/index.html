@@ -1,7 +1,17 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
+	<meta charset="utf-8">
+    <meta property="og:image" content="./imgs/preview.png" />
+    <meta property="og:image:width" content="1387"/>
+	<meta property="og:image:height" content="820"/>
+
 	<title>Fluid Simulation</title>
+	<meta name="description" content="Javascript app that simulates the Stokes Flow around a falling sphere for low Reynolds Numbers. Meant as a lab auxiliary for the University of Birmingham.">
+  	<meta name="author" content="Andrei Leonard Nicusan, 2018">
+  	<meta name="keywords" content="Javascript, JS, app, simulation, Stokes, Stokes flow, flow, sphere, Reynolds number, Reynolds, lab, lab auxiliary, WebGL, canvas, HTML canvas, HTML, web, falling sphere, viscosity, jacobi, jacobi iterations, Navier-Stokes, Navier, equations, faster, slower">
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.4/math.min.js"></script>
 	<script
 	  src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -9,9 +19,14 @@
 	  crossorigin="anonymous"></script>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
+
+	<!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  	<![endif]-->
 </head>
-<body id='body'>
+
+<body>
 	<div class="top_container">
 		<div class="top_menu">
 

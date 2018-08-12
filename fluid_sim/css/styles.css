@@ -25,13 +25,15 @@ body {
 }
 
 .button_time, .button_viscosity, .top_buttons, .button_jacobi {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
     float:left;
     height: 40px;
     width: 100px;
     outline: none;
     cursor: pointer;
     margin-top: 10px;
-    -webkit-border-radius: 0px;
 }
 
 .half {

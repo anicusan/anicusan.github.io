@@ -1,7 +1,10 @@
-/**
- * 2D fluid simulation code for
- * http://jamie-wong.com/2016/08/04/webgl-fluid-simulation/
+/*
+ * Stokes Flow simulation code for anicusan.github.io/fluid_sim/index.html
+ * Released by Andrei Leonard Nicusan in 2018 with GNU v3.0 License
+ * Used data collected in the laboratories of University of Birmingham
+ * Used some WebGL code from jamie-wong.com/2016/08/04/webgl-fluid-simulation/
  */
+
 window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options) {
 
   /*
