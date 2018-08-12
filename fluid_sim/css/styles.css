@@ -1,5 +1,6 @@
 body {
     font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
 }
 
 .top_container {
@@ -125,4 +126,16 @@ canvas {
     width: 250px;
     text-align: left;
     overflow-y: scroll;
+}
+
+.footer_meta {
+    position: absolute;
+    right: 46px;
+    font-size: 16px;
+    z-index: 10;
+    color: black;
+}
+
+.footer_meta li {
+  display: inline;
 }
