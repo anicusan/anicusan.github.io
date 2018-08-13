@@ -41,11 +41,7 @@ body {
     width: 50px;
 }
 
-.button_time:hover {
-    background-color: #bababa;
-}
-
-.button_viscosity:hover {
+.button_time:hover, .button_viscosity:hover, .button_jacobi:hover, .top_buttons:hover, #closeHelp:hover {
     background-color: #bababa;
 }
 
@@ -126,6 +122,41 @@ canvas {
     width: 250px;
     text-align: left;
     overflow-y: scroll;
+}
+
+.modal_container {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 20; /* Sit on top */
+    padding-top: 80px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal_content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    height: 600px;
+    overflow-y: auto;
+}
+
+#closeHelp {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
+    height: 40px;
+    width: 580px;
+    outline: none;
+    cursor: pointer;
+    margin-left: 10px;
 }
 
 .footer_meta {

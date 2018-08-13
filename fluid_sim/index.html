@@ -17,6 +17,7 @@
 	  src="https://code.jquery.com/jquery-3.3.1.min.js"
 	  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	  crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css?v=1.0">
@@ -31,7 +32,7 @@
 		<div class="top_menu">
 
 			<button class="top_buttons" id="reset">Reset</button>
-			<button class="top_buttons">Help</button>
+			<button class="top_buttons" id="help">Help</button>
 
 			<button class="top_text">Time: </button>
 			<button class="button_time half" id="4x_slower">4x ◀◀</button>
@@ -60,6 +61,117 @@
 
 		</div>
 	</div>
+
+	<div class="modal_container" id="helpDiv">
+		<div class="modal_content">
+			<p>
+				<h1>Introduction</h1>
+				<p>This is a web app that simulates the fluid flow around a falling sphere, 
+				taking into account the dynamic effects of fluid viscosity, sphere radius 
+				and density, along with static parameters such as gravity, buoyancy and drag.</p>
+				<p>The simulation measures the time taken for the sphere to travel 15cm at terminal 
+				velocity. It is meant as a lab auxiliary for the Chemical Engineering course at 
+				the University of Birmingham.</p>
+
+				<h1>Usage</h1>
+				<p>The simulation parameters can be changed from the menus at the top of the 
+				screen. The time can be altered from real time to 4 times slower or 4 times 
+				faster. The viscosity is measured in centistokes (cSt).</p>
+				<p>Any sphere can be selected by clicking on it. The radius is provided in 
+				imperial measurements, like the laboratory resources.</p>
+				<p>At the bottom of the screen is the table for physical, dynamic parameters. 
+				On the right is the data log that outputs the measurements.</p>
+				<p>The Jacobi iterations parameter represents the number of calculations for 
+				the fluid movement. A higher number of iterations provides higher fidelity in the 
+				fluid flow, but requires more power from the GPU.</p>
+				<p>More in-depth information is given in the next section.</p>
+
+				<h1>Technicalities</h1>
+				<p>The graphical fluid flow is modelled using the Navier-Stokes equations:
+				$$\frac{\partial \vec{u}}{\partial t} = -\vec{u} \cdot \nabla \vec{u} - \frac{1}{\rho}\nabla \rho + \nu \nabla^2\vec{u} + \vec{F}$$
+				$$\nabla \cdot \vec{u} = 0$$
+
+				However, for purely graphical purposes, leaving the viscosity term out provides 
+				a very good trade-off in terms of computational efficiency and graphical fidelity. 
+				The equations are solved numerically for pressure using Jacobi iterations.</p>
+
+				<p>The graphical sphere movement is modelled using gravitational acceleration, 
+				drag force and buoyancy. The sphere moves in discrete time-steps of around 0.065ms. 
+				Therefore, at terminal velocity, the following is true:
+				$$ m g = C_d A \frac {\rho u^2}{2} + \rho V g $$
+
+				The drag coefficient C<sub>d</sub> is defined in terms of the Reynolds Number:
+				$$ Re = \frac {\rho u d}{\mu} $$
+				<ul>
+					<li>For Stokes' flow (Re < 0.2) $$C_d = \frac{24}{Re}$$</li>
+					<li>For Allen flow (0.2 < Re < 1000) $$C_d = \frac{24}{Re} (1 + 0.15 Re^{0.687})$$</li>
+					<li>For Newton flow (1000 < Re < 2x10<sup>5</sup>) $$C_d = 0.44$$</li>
+					<li>For Re > 2x10<sup>5</sup> $$C_d= 0.11$$</li>
+				</ul>
+				</p>
+				<p>The simulation screen is comprised of two superimposed HTML canvases:
+				<ul>
+					<li>The fluid simulation is in the background and is rendered on the GPU.</li>
+					<li>The sphere movement is in the foreground and is rendered on the CPU.</li>
+				</ul></p>
+				<p>The programming technicalities can be accessed in the well-commented javascript file 
+				fluid-sim.js. I have written it to be as modular and intuitive as possible. It is 
+				available in this website's sources in the developer menu, as well as on my 
+				<a href="https://github.com/anicusan/anicusan.github.io/tree/master/fluid_sim">github account</a></p>
+
+				<h1>References and Further Reading</h1>
+				<p>To make this, I had to draw from many different sources. The main ones are:
+				<ul>
+					<li><a href="http://jamie-wong.com/2016/08/05/webgl-fluid-simulation/#navier-stokes">Jamie-Wong's 
+					WebGL Fluid Simulation: </a> this is by far the most important resource I used. It describes the 
+					mathematical-computational concepts used for fluid simulation in a very user-friendly format. I 
+					used most of the WebGL code from here, updating all the libraries and enhancing numerical stability.</li>
+					<li><a href="http://developer.download.nvidia.com/books/HTML/gpugems/gpugems_ch38.html">GPU Gems 
+					Chapter 38. Fast Fluid Dynamics Simulation on the GPU: </a> it walks through specific implementation 
+					ideas, and gave me a much better intuition for advection. It is written in a much more technical 
+					language, being more of a scientific paper.</li>
+					<li><a href="https://29a.ch/sandbox/2012/fluidcanvas/">Jonas Wagner’s fluid simulation on canvas </a>
+					and particularly the source for it (fluid.js) were helpful for understanding what a full solution 
+					actually looks like.</li>
+					<li><a href="http://apps.amandaghassaei.com/VortexShedding/#">Amanda Ghassaei vortex shedding 
+					simulation: </a> I used this to analyse vortex formation and actual coding of the simulation.</li>
+					<li><a href="https://burakkanber.com/blog/modeling-physics-javascript-gravity-and-drag/"> Burak 
+					Kanber's modelling physics in javascript: </a> I used this as a tutorial for modelling forces 
+					in javascript and rendering them in an HTML canvas.</li>
+					<li><a href="https://github.com/evanw/lightgl.js/">Evan Wallace's LightGL library: </a> this 
+					javascript library provides a very light abstraction layer on top of WebGL. Very helpful for 
+					prototyping the simulation on the GPU.</li>
+					<li>Dr. Phillip Robbins, Senior Lecturer of the School of Chemical Engineering of the University
+					of Birmingham: I got the lab description and the physical properties of the lab resources from the 
+					exercise paper written by Dr. Robbins.</li>
+					<li>Many thanks for also having Ciara Albas-Martin MEng and Marten Reichow MEng conduct this 
+					experiment in the lab and taking lots of measurements.</li>
+				</ul></p>
+			</p>
+
+			<button id="closeHelp">Close</button>
+
+			<script type="text/javascript">
+				var helpDiv = document.getElementById('helpDiv');
+				var openHelp = document.getElementById("help");
+				var closeHelp = document.getElementById("closeHelp");
+
+				openHelp.onclick = function() {
+					$(helpDiv).fadeIn(400);
+					document.getElementById("stop_sim").click();
+				}
+				closeHelp.onclick = function() {
+					$(helpDiv).fadeOut(400);
+				}
+				window.onclick = function(event) {
+				    if (event.target == helpDiv) {
+				        $(helpDiv).fadeOut(400);
+				    }
+				}
+			</script>
+		</div>
+	</div>
+
 	<div class="container">
 		<canvas id="sphere_selection">Use a better browser!</canvas>
 	</div>
