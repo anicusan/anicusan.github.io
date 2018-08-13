@@ -50,6 +50,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     // Sphere 0, stainless steel
     {
       name: 'Steel - 3/8", 5/16", 1/4", 3/16"',
+      description: 'Steel 3/8"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -68,6 +69,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 1, stainless steel
     {
+      description: 'Steel 5/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -86,6 +88,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 2, stainless steel
     {
+      description: 'Steel 1/4"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -104,6 +107,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 3, stainless steel
     {
+      description: 'Steel 3/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -123,6 +127,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     // Sphere 4, glass
     {
       name: 'Glass - 3/8", 5/16", 1/4", 3/16"',
+      description: 'Glass 3/8"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -141,6 +146,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 5, glass
     {
+      description: 'Glass 5/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -159,6 +165,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 6, glass
     {
+      description: 'Glass 1/4"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -177,6 +184,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 7, glass
     {
+      description: 'Glass 3/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -196,6 +204,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     // Sphere 8, PTFE
     {
       name: 'PTFE - 3/8", 5/16", 1/4", 3/16"',
+      description: 'PTFE 3/8"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -214,6 +223,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 9, PTFE
     {
+      description: 'PTFE 5/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -232,6 +242,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 10, PTFE
     {
+      description: 'PTFE 1/4"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -250,6 +261,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 11, PTFE
     {
+      description: 'PTFE 3/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -269,6 +281,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     // Sphere 12, Nylon
     {
       name: 'Nylon - 3/8", 5/16", 1/4", 3/16"',
+      description: 'Nylon 3/8"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -287,6 +300,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 13, Nylon
     {
+      description: 'Nylon 5/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -305,6 +319,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 14, Nylon
     {
+      description: 'Nylon 1/4"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -323,6 +338,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
     },
     // Sphere 15, Nylon
     {
+      description: 'Nylon 3/16"',
       // --Initial position-- 
       position: {x: false, y: false},
       velocity: {x: 0, y: 0},
@@ -451,6 +467,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
   var dim = options.dim || 2; // m
 
   var mouse = {x: 0, y: 0, isDown: false};
+  var csvString = "";
 
   // Initial position of selected sphere
   function init_pos() {
@@ -463,7 +480,13 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
 
     terminalVelocityReached = 0;
     endPos = 0;
-    $('#data_log').append('-------------------------------------<br>New Simulation<br>');
+    $('#data_log').append('-------------------------------------<br>New Simulation - '+
+      spheres[selectedSphere].description+': <br>');
+    csvString += '\n' + spheres[selectedSphere].description + '\n';
+    csvString += 'Fluid density (kg/m^3): , '+DENSITY+'\n';
+    csvString += 'Fluid kinematic viscosity (m^2/s): ,'+VISCOSITY+'\n';
+    csvString += 'Sphere density (kg/m^3): , '+spheres[selectedSphere].density+'\n';
+    csvString += 'Sphere radius (m): , '+spheres[selectedSphere].radius+'\n';
   }
   init_pos();
 
@@ -793,6 +816,7 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       if (terminalVelocityReached == 0) {
         toDisp = sph.position.y - initial_position_y;
         $('#data_log').append('Terminal velocity reached after '+(toDisp*100).toFixed(4)+'cm.<br>');
+        csvString += 'Terminal velocity reached after (m):,'+(toDisp).toFixed(4)+'\n';
 
         startIters = 0;
         startPos = sph.position.y;
@@ -806,11 +830,13 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
       toDisp = startIters*DELTA_T;
       startIters = -1;
       $('#data_log').append(''+(lenMeasure*100)+'cm travelled in '+toDisp.toFixed(2)+'s.<br>');
+      csvString += ''+(lenMeasure*100)+'cm travelled in (s):, '+toDisp.toFixed(2)+'\n';
     }
 
     if (sph.position.y > dim - sph.radius * 1.2 && endPos == 0) {
       $('#data_log').append('Did not travel '+(lenMeasure)*100+'cm at terminal velocity.<br>');
       endPos = 1;
+      csvString += 'Did not travel '+(lenMeasure)+'m at terminal velocity\n';
     }
 
   }
@@ -826,6 +852,24 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
         logElement.scrollTop = logElement.scrollHeight - logElement.clientHeight
       }
   }, 500)
+
+  function download_csv() {
+    /*Encode and attach the data to a hyperlink for download*/
+    console.log(csvString);
+
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'data_fluid_sim.csv';
+    hiddenElement.click();
+  }
+  $('#exportCSV').click(download_csv);
+
+  function clearLog() {
+    csvString = "";
+    $(logElement).empty();
+  }
+  $('#clearLog').click(clearLog);
 
   function sphereSplash() {
     var sph = spheres[selectedSphere];

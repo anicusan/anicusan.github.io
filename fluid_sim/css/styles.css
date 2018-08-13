@@ -159,6 +159,16 @@ canvas {
     margin-left: 10px;
 }
 
+#exportCSV, #clearLog {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border: 10px;
+    height: 100%;
+    width: 100%;
+    outline: none;
+    cursor: pointer;
+}
+
 .footer_meta {
     position: absolute;
     right: 46px;
