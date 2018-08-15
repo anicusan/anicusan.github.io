@@ -618,8 +618,8 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
         mouse.isDown = false;
         console.log('x: '+(spheres[selectedSphere].position.y - mouse.y / HEIGHT * dim));
         console.log('y: '+(spheres[selectedSphere].position.x - mouse.x / WIDTH * dim));
-        spheres[selectedSphere].velocity.y = (spheres[selectedSphere].position.y - mouse.y / HEIGHT * dim) * 10;
-        spheres[selectedSphere].velocity.x = (spheres[selectedSphere].position.x - mouse.x / WIDTH * dim) * 10;
+        spheres[selectedSphere].velocity.y = (spheres[selectedSphere].position.y - mouse.y / HEIGHT * dim) * 100;
+        spheres[selectedSphere].velocity.x = (spheres[selectedSphere].position.x - mouse.x / WIDTH * dim) * 100;
     }
   }
 
@@ -873,6 +873,9 @@ window.FluidSim = function(canvasId, sphereCanvasID, sphereSelectionID, options)
 
   function sphereSplash() {
     var sph = spheres[selectedSphere];
+
+    if (mouse.isDown)
+      return ;
 
     textures.velocity1.drawTo(function() {
       addSplat(

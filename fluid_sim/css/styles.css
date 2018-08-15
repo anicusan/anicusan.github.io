@@ -159,14 +159,25 @@ canvas {
     margin-left: 10px;
 }
 
+.log_buttons {
+    height: 22px;
+}
+
 #exportCSV, #clearLog {
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
-    border: 10px;
     height: 100%;
     width: 100%;
     outline: none;
     cursor: pointer;
+}
+
+#exportCSV:hover, #clearLog:hover {
+    background-color: #bababa;
+}
+
+#exportCSV:active, #clearLog:active {
+    background-color: #777777;
 }
 
 .footer_meta {
