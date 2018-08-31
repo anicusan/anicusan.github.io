@@ -1,7 +1,80 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+}
+
+.formline {
+	height: 40px;
+	margin: 10px;
+	
+}
+
+.formline button, input {
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
+
+	height: 100%;
+}
+
+.formline button {
+	cursor: pointer;
+}
+
+.formline input {
+	width: 50px;
+	text-align: center;
+}
+
+.formline button:hover {
+	background-color: #bababa;
+}
+
+#eq {
+	width: 500px;
+}
+
+
+
+#diff_form button {
+	width: 200px;
+}
+
 .slidecontainer {
     width: 100%;
 }
 
-body, html {
-  height: 100%;
+.slidecontainer button, input {
+	-moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
+}
+
+.slidecontainer button {
+	cursor: pointer;
+	width: 20px;
+}
+
+.slidercontainer input {
+	width: 200px;
+	text-align: center;
+}
+
+
+.footer_meta {
+    position: absolute;
+    right: 46px;
+    font-size: 16px;
+    z-index: 10;
+    color: black;
+}
+
+.footer_meta li {
+  display: inline;
 }

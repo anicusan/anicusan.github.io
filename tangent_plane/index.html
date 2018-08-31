@@ -11,6 +11,7 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.3/math.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+  <link rel="stylesheet" href="css/normalize.css?v=1.0">
   <link rel="stylesheet" href="css/styles.css?v=1.0">
 
   <!--[if lt IE 9]>
@@ -21,36 +22,28 @@
 <body>
 	<div id="Menu">
 		<form id="eq_form">
-			<label for="eq">Enter an equation:</label>
-			<br>
-			<label for="eq">z = </label>		
-			<input type="text" id="eq" value="x^3 + 6 * y^2 + 2" />
-			<button type="button" id="add_plot">Add plot</button>
-			<button type="button" id="rm_plots">Remove all plots</button>		
-			<br>
-			<label for="xmin">x range:</label>
-			<input type="text" id="xmin" value="-10" />
-			<input type="text" id="xmax" value="10" />
-			<br>
-			<label for="ymin">y range:</label>
-			<input type="text" id="ymin" value="-10" />
-			<input type="text" id="ymax" value="10" />
-			<br>
-			<button type="button" id="show_plot">Show plot</button>
-			<button type="button" id="hide_plot">Hide plot</button>
+			<div class="formline">
+				<label for="eq">z = </label>		
+				<input type="text" id="eq" value="x^3 + 6 * y^2 + 2" />
+				<button type="button" id="add_plot">Add plot</button>
+				<button type="button" id="rm_plots">Purge Plots</button>		
+			</div>
+			<div class="formline">
+				<label for="xmin">x range:</label>
+				<input type="text" id="xmin" value="-10" />
+				<input type="text" id="xmax" value="10" />
+			</div>
+			<div class="formline">
+				<label for="ymin">y range:</label>
+				<input type="text" id="ymin" value="-10" />
+				<input type="text" id="ymax" value="10" />
+			</div>
+			<div class="formline">
+				<button type="button" id="show_plot">Show plot</button>
+				<button type="button" id="hide_plot">Hide plot</button>
+			</div>
 		</form>
-		<br>
-		<form id="diff_form">
-			<label for="differentiate">Differentiate:</label>
-			<br>
-			<button type="button" id="differentiate">Differentiate</button>
-			<button type="button" id="show_tplane">Show tangent plane</button>
-			<button type="button" id="rm_tplane">Remove tangent plane</button>
-		</form>
-	</div>
 
-	<div class="slidecontainer"></div>
-	<hr>
 	<div id="myDiv"></div>
 	<script>
 		h = $(window).height() * 0.7;
@@ -60,6 +53,18 @@
 		else
 			$('#myDiv').css({'height': ''+w+'px', 'width': ''+w+'px'});
 	</script>
+
+	<hr>
+
+	<form id="diff_form">
+		<div class="formline">
+			<button type="button" id="differentiate">Differentiate</button>
+			<button type="button" id="show_tplane">Show tangent plane</button>
+			<button type="button" id="rm_tplane">Remove tangent plane</button>
+		</div>
+	</form>
+	<div class="slidecontainer"></div>
+
 	<hr>
 	<div>
 		<p>
@@ -77,6 +82,15 @@
 			<br>
 		</p>
 	</div>
+
+	<ul class="footer_meta">
+	    <li>Andrei Leonard Nicusan, 2018</li>
+	    <li style="margin: 10px;"> | </li>
+	    <li>University of Birmingham</li>
+	    <li style="margin: 10px;"> | </li>
+	    <li>License: <strong>GNU v3.0</strong></li>
+	</ul>
+
 	<script src="js/scripts.js"></script>
 
 </body>
