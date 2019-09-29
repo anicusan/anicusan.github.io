@@ -1,53 +1,83 @@
-<!doctype html>
+---
+layout: default
+---
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+<div class="container">
+	<div class="row">
+		<div class="col col-12">
+			<article class="article-first">
+				<div class="article-image-first">
 
-  <title>Hub</title>
-  <meta name="description" content="Hub for some web projects">
-  <meta name="author" content="Andrei Leonard Nicusan">
+                    <div id="particles-first"></div>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,900" rel="stylesheet">
+					<div class="article-content-first">
 
-  <link rel="stylesheet" href="css/styles.css?v=3">
+                        <!--
+						<div class="article-tag">
+						{% if post.tags.size >= 1 %}
+							{% for tag in post.tags %}
+							<a href="{{ site.baseurl }}/tags#{{tag}}" class="tag">{{ tag }}</a>
+							{% endfor %}
+						{% else %} {% endif %}
+						</div>
+                        -->
 
-</head>
+						<h2 class="article-title">Portofolio</h2>
+						<p class="article-excerpt">Who says chemical engineers can't code?</p>
 
-<body>
+                        <!--
+						<a href="{{ post.url | prepend: site.baseurl }}" class="button read-more">Read More</a>
+                        -->
 
-<ul class="header_meta">
-  <li>Andrei Leonard Nicusan, 2018</li>
-  <li style="margin: 10px;"> | </li>
-  <li>License: <strong>GNU v3.0</strong></li>
-</ul>
+					</div>
 
-<!-- Side navigation -->
-<div class="sidenav">
-    <div onclick="window.location='https://anicusan.github.io/fluid_simulation/';">
-    Stokes Flow Simulation
-    <hr>
-    <p>Javascript app that simulates the Stokes Flow around a falling sphere for low Reynolds Numbers. Meant as a lab auxiliary for the University of Birmingham.</p>
-  </div>
-
-  <div onclick="window.location='tangent_plane/index.html';">
-    Tangent Plane Constructor
-    <hr>
-    <p>Javascript app that plots any 3D function and constructs the tangent plane
-    at any point. Meant as a teaching tool for partial derivatives and linear
-    approximations.</p>
-  </div>
+				</div>
+			</article> <!-- /.article-first -->
+		</div>
+	</div>
 </div>
 
-<!-- particles.js container -->
-<div id="particles-js"></div>
 
-<!-- particles scripts -->
-<script src="js/particles.js"></script>
-<script src="js/app.js"></script>
-
-</body>
-</html>
+<div class="container">
+	<div class="row">
+		<div class="col col-12 col-t-8">
+			<div class="row">
+			{%- for post in paginator.posts offset: 0 -%}
+				<article class="article col col-12 col-t-6">
+					<div class="article-box">
+						<div class="article-head">
+							<a href="{{ post.url | prepend: site.baseurl }}" class="article-image" style="background-image: url({{"/img/" | prepend: site.baseurl | append : post.image}})">
+								<div class="image-overlay">
+									<span class="image-overlay-text">{{post.title | slice: 0}}</span>
+								</div>
+							</a>
+						</div>
+						<div class="article-content">
+							<div class="article-info">
+								<div class="article-date">
+									<span class="date"><time datetime="{{ post.date | date_to_xmlschema }}">{% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}{{ post.date | date: date_format }}</time></span>
+								</div>
+								<div class="article-tag">
+								{% if post.tags.size >= 1 %}
+									{% for tag in post.tags %}
+									<a href="{{ site.baseurl }}/tags#{{tag}}" class="tag">{{ tag }}</a>
+									{% endfor %}
+								{% else %} {% endif %}
+								</div>
+							</div>
+							<h2 class="article-title">
+								<a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
+							</h2>
+							<p class="article-excerpt">{% if post.description %}{{ post.description | strip_html | truncate: 135 }}{% else %}{{ post.content | strip_html | truncate: 135 }}{% endif %}</p>
+						</div>
+					</div>
+				</article> <!-- /.article -->
+			{% endfor %}
+			</div>
+			{% include pagination.html %}
+		</div>
+		<div class="col col-12 col-t-4">
+			{% include sidebar.html %}
+		</div>
+	</div>
+</div>

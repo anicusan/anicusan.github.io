@@ -1,0 +1,77 @@
+#-------------------------------
+# General Site Settings
+
+title: Andrei-Leonard Nicusan | Personal Website
+description: Hello, I am Leonard, a Chemical Engineering student who likes making computers do the work. I am open to collaborations of any form! # this means to ignore newlines until "baseurl:"
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "anicusan.github.io"
+
+
+#-------------------------------
+# About Section
+author-name:   Andrei-Leonard Nicusan
+author-avatar: aln_avatar.png
+author-email:  a.l.nicusan@bham.ac.uk
+author-location: University of Birmingham, UK
+
+
+#-------------------------------
+# Contact links
+github:     https://github.com/anicusan
+linkedin:   https://linkedin.com/in/anicusan
+#facebook:  https://facebook.com/ # Add your Facebook handle
+#twitter:   https://twitter.com/ # Add your Facebook handle
+#instagram: https://www.instagram.com/ # Add your Facebook handle
+#pinterest: https://www.pinterest.com/ # Add your Facebook handle
+
+
+#-------------------------------
+# Comment Section (Disqus)
+disqus-identifier: false
+
+
+#-------------------------------
+# Instagram Feed
+instafeed: false
+
+
+#-------------------------------
+# Google Analytics
+google-analytics: UA-148953855-1
+
+
+#-------------------------------
+# Newsletter
+newsletter: false
+#mailchimp: # Add your MailChimp form identifier. For example - blogenjoyfreedom.us16.list-manage.com/subscribe/post?u=cd56155d76ddeeb4c0bc4d080&amp;id=7a526cd13e
+
+
+#-------------------------------
+# Build settings
+markdown: kramdown
+permalink: ':title/'
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+
+paginate: 7
+paginate_path: "/page/:num"
+
+include:
+  - _pages
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+
+#-------------------------------
+# Exclude from processing.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/

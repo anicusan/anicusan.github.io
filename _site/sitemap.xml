@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4000/tangent-plane-constructor/</loc>
+<lastmod>2018-08-31T17:03:30+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/fluid-simulation/</loc>
+<lastmod>2018-08-31T19:03:30+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/pypinch/</loc>
+<lastmod>2019-05-28T15:03:30+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/pept/</loc>
+<lastmod>2019-08-23T12:03:30+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/curriculum-vitae/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/tags/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/img/CV_ALN_2019.pdf</loc>
+<lastmod>2019-09-29T20:30:18+01:00</lastmod>
+</url>
+</urlset>
