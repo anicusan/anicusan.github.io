@@ -12,6 +12,6 @@ The simulation measures the time taken for the sphere to travel 15cm at terminal
 
 It is used by a senior lecturer at the University of Birmingham.
 
-The app is available online [here](https://.anicusan.github.io/fluid_simulation/).
+The app is available online [here](https://anicusan.github.io/fluid_simulation/).
 
 
